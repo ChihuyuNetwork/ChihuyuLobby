@@ -26,6 +26,7 @@ class ChihuyuLobbyPlugin : JavaPlugin() {
             GameRule.DO_TRADER_SPAWNING,
             GameRule.DO_WARDEN_SPAWNING,
             GameRule.DO_WEATHER_CYCLE,
+            GameRule.DO_DAYLIGHT_CYCLE,
             GameRule.DO_FIRE_TICK,
             GameRule.DO_VINES_SPREAD,
             GameRule.MOB_GRIEFING,
