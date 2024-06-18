@@ -11,14 +11,12 @@ plugins {
 }
 
 group = "love.chihuyu"
-version = "0.0.1-SNAPSHOT"
+version = ""
 val pluginVersion: String by project.ext
 
 repositories {
     mavenCentral()
     maven("https://repo.codemc.org/repository/maven-public/")
-//    maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.hirosuke.me/snapshots/")
     maven("https://repo.purpurmc.org/snapshots")
 }
 
@@ -29,10 +27,7 @@ repositories {
  */
 
 dependencies {
-    compileOnly("org.purpurmc.purpur:purpur-api:$pluginVersion-R0.1-SNAPSHOT")
-//    compileOnly("io.papermc.paper:paper-api:$pluginVersion-R0.1-SNAPSHOT")
-//    compileOnly("org.spigotmc:spigot-api:$pluginVersion-R0.1-SNAPSHOT")
-//    compileOnly("org.bukkit:bukkit:$pluginVersion-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:$pluginVersion-R0.1-SNAPSHOT")
     compileOnly("dev.jorel:commandapi-bukkit-core:9.5.0")
     compileOnly("dev.jorel:commandapi-bukkit-kotlin:9.5.0")
     compileOnly(kotlin("stdlib"))
@@ -52,11 +47,17 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         from(sourceSets.main.get().resources.srcDirs) {
-            filter(org.apache.tools.ant.filters.ReplaceTokens::class, mapOf("tokens" to mapOf(
-                "version" to project.version.toString(),
-                "name" to project.name,
-                "mainPackage" to "love.chihuyu.${project.name.lowercase()}.${project.name}Plugin"
-            )))
+            filter(
+                org.apache.tools.ant.filters.ReplaceTokens::class,
+                mapOf(
+                    "tokens" to
+                        mapOf(
+                            "version" to project.version.toString(),
+                            "name" to project.name,
+                            "mainPackage" to "love.chihuyu.${project.name.lowercase()}.${project.name}Plugin",
+                        ),
+                ),
+            )
             filteringCharset = "UTF-8"
         }
     }
@@ -70,92 +71,6 @@ tasks {
     }
 }
 
-publishing {
-    repositories {
-        maven {
-            name = "repo"
-            credentials(PasswordCredentials::class)
-            url = uri(
-                if (project.version.toString().endsWith("SNAPSHOT"))
-                    "https://repo.hirosuke.me/snapshots/"
-                else
-                    "https://repo.hirosuke.me/releases/"
-            )
-        }
-    }
-
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-        }
-    }
-}
-
 kotlin {
-    jvmToolchain(17)
-}
-
-task("setup") {
-    doFirst {
-        val projectDir = project.projectDir
-        projectDir.resolve("renovate.json").deleteOnExit()
-        val srcDir = projectDir.resolve("src/main/kotlin/love/chihuyu/${project.name.lowercase()}").apply(File::mkdirs)
-        srcDir.resolve("${project.name}Plugin.kt").writeText(
-            """
-                package love.chihuyu.${project.name.lowercase()}
-                
-                import org.bukkit.plugin.java.JavaPlugin
-    
-                class ${project.name}Plugin: JavaPlugin() {
-                    companion object {
-                        lateinit var ${project.name}Plugin: JavaPlugin
-                    }
-                
-                    init {
-                        ${project.name}Plugin = this
-                    }
-                }
-            """.trimIndent()
-        )
-    }
-}
-
-task("generateActionsFile") {
-    doFirst {
-        val actionFile = projectDir.resolve(".github/workflows").apply(File::mkdirs)
-        actionFile.resolve("deploy.yml").writeText(
-            """
-                name: Deploy
-                on:
-                  workflow_dispatch:
-                  push:
-                    branches:
-                      - 'master'
-                    paths-ignore:
-                      - "**.md"
-                jobs:
-                  build:
-                    runs-on: ubuntu-latest
-                    permissions:
-                      contents: read
-                    steps:
-                      - uses: actions/checkout@v3
-                      - name: Set up JDK 17
-                        uses: actions/setup-java@v3
-                        with:
-                          java-version: '17'
-                          distribution: 'temurin'
-                      - name: Grant execute permission for gradlew
-                        run: chmod +x gradlew
-                      - name: Prepare gradle.properties
-                        run: |
-                          mkdir -p ${ "\$HOME" }/.gradle
-                          echo ${ "repoUsername=\${{ secrets.DEPLOY_USERNAME }} "} >> ${ "\$HOME" }/.gradle/gradle.properties
-                          echo ${ "repoPassword=\${{ secrets.DEPLOY_PASSWORD }}"} >> ${ "\$HOME" }/.gradle/gradle.properties
-                      - name: Deploy
-                        run: |
-                          ./gradlew clean test publish
-            """.trimIndent()
-        )
-    }
+    jvmToolchain(21)
 }
