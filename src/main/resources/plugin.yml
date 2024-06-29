@@ -1,4 +1,7 @@
 name: @name@
 main: @mainPackage@
-version: 1.0.0
+version: "1.0.0"
 load: POSTWORLD
+depend:
+  - ChihuyuLib
+api-version: 1.21

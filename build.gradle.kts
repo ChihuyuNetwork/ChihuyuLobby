@@ -28,8 +28,8 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:$pluginVersion-R0.1-SNAPSHOT")
-    compileOnly("love.chihuyu:ChihuyuLib:0.0.1-SNAPSHOT")
-    compileOnly(kotlin("stdlib"))
+    compileOnly("love.chihuyu:ChihuyuLib:0.0.2-SNAPSHOT")
+//    compileOnly(kotlin("stdlib"))
 }
 
 ktlint {

@@ -15,6 +15,6 @@ object HornListener: Listener {
         val player = e.player
         val item = e.type
 
-        if (item == Material.GOAT_HORN) player.ban<BanEntry<PlayerProfile>>("笛使うな", Instant.MAX, "ChihuyuLobby", true)
+        if (item == Material.GOAT_HORN) player.ban<BanEntry<PlayerProfile>>("笛を使うな", Instant.now().plusSeconds(60), "ChihuyuLobby", true)
     }
 }
