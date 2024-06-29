@@ -1,5 +1,6 @@
 package love.chihuyu.chihuyulobby
 
+import love.chihuyu.chihuyulobby.listeners.HornListener
 import org.bukkit.GameRule
 import org.bukkit.World
 import org.bukkit.plugin.java.JavaPlugin
@@ -16,6 +17,12 @@ class ChihuyuLobbyPlugin : JavaPlugin() {
     override fun onEnable() {
         server.worlds.forEach {
             it.fixGamerule()
+        }
+
+        listOf(
+            HornListener
+        ).forEach {
+            server.pluginManager.registerEvents(it, this)
         }
     }
 
@@ -52,7 +59,7 @@ class ChihuyuLobbyPlugin : JavaPlugin() {
             GameRule.SEND_COMMAND_FEEDBACK,
             GameRule.SHOW_DEATH_MESSAGES,
             GameRule.DISABLE_ELYTRA_MOVEMENT_CHECK,
-            GameRule.BLOCK_EXPLOSION_DROP_DECAY,
+            GameRule.BLOCK_EXPLOSION_DROP_DECAY
         ).forEach { setGameRule(it, true) }
         setGameRule(GameRule.SPAWN_RADIUS, 0)
         setGameRule(GameRule.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY, 0)
