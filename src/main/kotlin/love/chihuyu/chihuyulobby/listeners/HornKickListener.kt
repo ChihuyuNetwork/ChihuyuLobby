@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import java.time.Instant
 
-object HornListener: Listener {
+object HornKickListener: Listener {
 
     @EventHandler
     fun onHorn(e: PlayerItemCooldownEvent) {

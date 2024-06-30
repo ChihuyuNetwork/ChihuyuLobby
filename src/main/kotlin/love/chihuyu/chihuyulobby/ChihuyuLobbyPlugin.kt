@@ -1,7 +1,8 @@
 package love.chihuyu.chihuyulobby
 
-import love.chihuyu.chihuyulobby.listeners.HornListener
-import love.chihuyu.chihuyulobby.listeners.LeafListener
+import love.chihuyu.chihuyulobby.listeners.FarmProtectionListener
+import love.chihuyu.chihuyulobby.listeners.HornKickListener
+import love.chihuyu.chihuyulobby.listeners.LeavesDecayListener
 import org.bukkit.GameRule
 import org.bukkit.World
 import org.bukkit.plugin.java.JavaPlugin
@@ -21,8 +22,9 @@ class ChihuyuLobbyPlugin : JavaPlugin() {
         }
 
         listOf(
-            HornListener,
-            LeafListener
+            HornKickListener,
+            LeavesDecayListener,
+            FarmProtectionListener
         ).forEach {
             server.pluginManager.registerEvents(it, this)
         }
