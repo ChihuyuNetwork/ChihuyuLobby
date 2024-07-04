@@ -16,7 +16,7 @@ val pluginVersion: String by project.ext
 
 repositories {
     mavenCentral()
-    maven("https://repo.chihuyu.love/snapshots")
+    maven("https://chihuyu.love/repo/snapshots")
     maven("https://repo.purpurmc.org/snapshots")
 }
 
